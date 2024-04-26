@@ -2,7 +2,7 @@ const std = @import("std");
 const testing = std.testing;
 const parseInt = std.fmt.parseInt;
 
-const Version = "0.0.1";
+const Version: std.SemanticVersion = .{ .major = 0, .minor = 1, .patch = 0 };
 
 pub fn main() !void {
     const stdout = std.io.getStdOut().writer();
@@ -42,7 +42,7 @@ pub fn main() !void {
         _ = try printHelp(); // run the help function to print the help menu
         return;
     } else if (std.mem.eql(u8, args[1], "-v") or std.mem.eql(u8, args[1], "--version")) { // if the user provided `-v` ...
-        try stdout.print("Version: {s}\n", .{Version});
+        try stdout.print("Version: {any}\n", .{Version});
         try stdout.print("Author: gianni-rosato on GitHub\n", .{});
         return;
     }
@@ -192,48 +192,38 @@ pub fn main() !void {
     var encoderSpeed: u4 = undefined;
     switch (speed_tgt) {
         speedTarget.slower => { // "slower" speed target
-            if (encoder_tgt == encoderTarget.aom) {
-                encoderSpeed = 3;
-            } else if (encoder_tgt == encoderTarget.svt) {
-                encoderSpeed = 2;
-            } else if (encoder_tgt == encoderTarget.rav1e) {
-                encoderSpeed = 3;
+            switch (encoder_tgt) {
+                encoderTarget.aom => encoderSpeed = 3,
+                encoderTarget.svt => encoderSpeed = 2,
+                encoderTarget.rav1e => encoderSpeed = 3,
             }
         },
         speedTarget.slow => { // "slow" speed target
-            if (encoder_tgt == encoderTarget.aom) {
-                encoderSpeed = 4;
-            } else if (encoder_tgt == encoderTarget.svt) {
-                encoderSpeed = 4;
-            } else if (encoder_tgt == encoderTarget.rav1e) {
-                encoderSpeed = 4;
+            switch (encoder_tgt) {
+                encoderTarget.aom => encoderSpeed = 4,
+                encoderTarget.svt => encoderSpeed = 4,
+                encoderTarget.rav1e => encoderSpeed = 4,
             }
         },
         speedTarget.med => { // "medium" speed target
-            if (encoder_tgt == encoderTarget.aom) {
-                encoderSpeed = 5;
-            } else if (encoder_tgt == encoderTarget.svt) {
-                encoderSpeed = 6;
-            } else if (encoder_tgt == encoderTarget.rav1e) {
-                encoderSpeed = 6;
+            switch (encoder_tgt) {
+                encoderTarget.aom => encoderSpeed = 5,
+                encoderTarget.svt => encoderSpeed = 6,
+                encoderTarget.rav1e => encoderSpeed = 6,
             }
         },
         speedTarget.fast => { // "fast" speed target
-            if (encoder_tgt == encoderTarget.aom) {
-                encoderSpeed = 5;
-            } else if (encoder_tgt == encoderTarget.svt) {
-                encoderSpeed = 8;
-            } else if (encoder_tgt == encoderTarget.rav1e) {
-                encoderSpeed = 8;
+            switch (encoder_tgt) {
+                encoderTarget.aom => encoderSpeed = 5,
+                encoderTarget.svt => encoderSpeed = 8,
+                encoderTarget.rav1e => encoderSpeed = 8,
             }
         },
         speedTarget.faster => { // "faster" speed target
-            if (encoder_tgt == encoderTarget.aom) {
-                encoderSpeed = 5;
-            } else if (encoder_tgt == encoderTarget.svt) {
-                encoderSpeed = 10;
-            } else if (encoder_tgt == encoderTarget.rav1e) {
-                encoderSpeed = 9;
+            switch (encoder_tgt) {
+                encoderTarget.aom => encoderSpeed = 5,
+                encoderTarget.svt => encoderSpeed = 10,
+                encoderTarget.rav1e => encoderSpeed = 9,
             }
         },
     }
@@ -247,7 +237,7 @@ pub fn main() !void {
         },
         encoderTarget.svt => {
             try stdout.print("~~~~\nGenerated Command: ", .{});
-            try stdout.print("av1an --resume -i \"INPUT.mkv\" --verbose --split-method av-scenechange -m lsmash -c mkvmerge --sc-downscale-height {d} -e svt-av1 --force -v \"--tile-rows {d} --tile-columns {d} --input-depth 10 --tune 2 --enable-tf 0 --enable-qm 1 --qm-min 0 --qm-max 15 --keyint -1 --scd 0 --lp 2 --irefresh-type 2 --crf {d} --preset {d} --film-grain 12 --film-grain-denoise 0\" --pix-format yuv420p10le -a \"-c:a libopus -b:a 128k -ac 2\" -x {d} --set-thread-affinity 2 -w 0 -o \"OUTPUT.mkv\"\n", .{ height, rowsl, colsl, crf_svt, encoderSpeed, xs });
+            try stdout.print("av1an --resume -i \"INPUT.mkv\" --verbose --split-method av-scenechange -m lsmash -c mkvmerge --sc-downscale-height {d} -e svt-av1 --force -v \"--tile-rows {d} --tile-columns {d} --tune 3 --keyint -1 --lp 2 --crf {d} --preset {d} --film-grain 12\" --pix-format yuv420p10le -a \"-c:a libopus -b:a 128k -ac 2\" -x {d} --set-thread-affinity 2 -w 0 -o \"OUTPUT.mkv\"\n", .{ height, rowsl, colsl, crf_svt, encoderSpeed, xs });
             try stdout.print("~~~~\n", .{});
         },
         encoderTarget.rav1e => {
@@ -316,7 +306,7 @@ test "getTiles" {
 
     var testctpx: usize = 1920 * 1080;
     var testctar: usize = 1920 / 1080;
-    var testtpx: usize = 2000000;
+    const testtpx: usize = 2000000;
 
     _ = getTiles(testtpx, &testrowsl, &testcolsl, &testctpx, &testctar);
 
