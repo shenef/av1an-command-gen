@@ -277,19 +277,19 @@ fn printHelp() !void {
         \\Generates an AV1 encoding command for live-action encoding with Av1an
         \\
         \\Usage:
-        \\	av1an-command-gen [width] [height] [fps] [encoder] [speed] [size]
+        \\  av1an-command-gen [width] [height] [fps] [encoder] [speed] [size]
         \\
         \\Options:
-        \\    	Width:		Your input width in pixels
-        \\    	Height:		Your input height in pixels
-        \\    	fps:		Your input frames per second
-        \\    	Encoder:	Accepts `aom`, `svt`, `rav1e`
-        \\    	Speed:		Accepts `slower`, `slow`, `med`, `fast`, `faster`
-        \\    	Size:		Accepts `lowest`, `low`, `med`, `high`
+        \\  Width:         Your input width in pixels
+        \\  Height:        Your input height in pixels
+        \\  fps:           Your input frames per second
+        \\  Encoder:       Accepts `aom`, `svt`, `rav1e`
+        \\  Speed:         Accepts `slower`, `slow`, `med`, `fast`, `faster`
+        \\  Size:          Accepts `lowest`, `low`, `med`, `high`
         \\
         \\Info:
-        \\    	--help, -h	Prints this help menu
-        \\    	--version, -v	Prints version information
+        \\  --help, -h     Prints this help menu
+        \\  --version, -v  Prints version information
         \\
     ;
 
